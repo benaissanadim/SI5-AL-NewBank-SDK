@@ -1,0 +1,103 @@
+alerting:
+  alertmanagers:
+    - scheme: http
+      static_configs:
+        - targets: [ 'alertmanager:9093' ]
+
+rule_files:
+    - 'prometheus.rules.yml'
+
+scrape_configs:
+  - job_name: 'customerCareMetrics'
+    metrics_path: '/actuator/prometheus'
+    scrape_interval: 500ms
+    static_configs:
+      - targets: ['host.docker.internal:5003']
+        labels:
+          application: 'CustomerCare'
+
+  - job_name: "paymentAuthorizeMetrics1"
+    metrics_path: '/actuator/prometheus'
+    scrape_interval: 500ms
+    static_configs:
+      - targets: ['host.docker.internal:3501']
+        labels:
+          application: 'PaymentGateway Authorizer 1'
+
+  - job_name: "paymentAuthorizerMetrics2"
+    metrics_path: '/actuator/prometheus'
+    scrape_interval: 500ms
+    static_configs:
+      - targets: ['host.docker.internal:3503']
+        labels:
+          application: 'PaymentGateway Authorizer 2'
+
+  - job_name: "paymentConfirmationMetrics"
+    metrics_path: '/actuator/prometheus'
+    scrape_interval: 500ms
+    static_configs:
+      - targets: [ 'host.docker.internal:3500' ]
+        labels:
+          application: 'Payment confirmation'
+  - job_name: "paymentConfirmationMetrics2"
+    metrics_path: '/actuator/prometheus'
+    scrape_interval: 500ms
+    static_configs:
+      - targets: [ 'host.docker.internal:3504' ]
+        labels:
+          application: 'Payment confirmation2'
+
+
+  - job_name: "paymentServiceMetrics"
+    metrics_path: '/actuator/prometheus'
+    scrape_interval: 500ms
+    static_configs:
+      - targets: ['host.docker.internal:5004']
+        labels:
+          application: 'PaymentProcessor'
+
+  - job_name: "paymentSettlementMetrics"
+    metrics_path: '/actuator/prometheus'
+    scrape_interval: 500ms
+    static_configs:
+      - targets: ['host.docker.internal:5008']
+        labels:
+          application: 'PaymentSettlement'
+
+  - job_name: "feeCalculatorMetrics"
+    metrics_path: '/actuator/prometheus'
+    scrape_interval: 500ms
+    static_configs:
+      - targets: ['host.docker.internal:5005']
+        labels:
+          application: 'FeeCalculator'
+
+  - job_name: "transactionServiceMetrics"
+    metrics_path: '/actuator/prometheus'
+    scrape_interval: 500ms
+    static_configs:
+      - targets: ['host.docker.internal:4999']
+        labels:
+          application: 'TransactionService'
+
+  - job_name: "redis-exporter-1"
+    metrics_path: "/scrape"
+    params:
+      target: ["redis://localhost:6379"]
+    static_configs:
+      - targets: [ 'host.docker.internal:9121' ]
+
+  - job_name: "redis-exporter-2"
+    metrics_path: "/scrape"
+    params:
+      target: ["redis://localhost:6378"]
+    static_configs:
+      - targets: [ 'host.docker.internal:9120' ]
+      
+  - job_name: 'businessIntegrator'
+    metrics_path: '/actuator/prometheus'
+    scrape_interval: 500ms
+    static_configs:
+      - targets: ['host.docker.internal:5012']
+        labels:
+          application: 'BusinessIntegrator'

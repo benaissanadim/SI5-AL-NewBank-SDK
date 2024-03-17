@@ -1,0 +1,30 @@
+version: '3.1'
+services:
+
+  metrics-service:
+    image: "newbank/metrics-service"
+    container_name: "metrics-service"
+    ports:
+      - "3003:8080"
+    restart: on-failure
+    networks:
+      - spring-newbank-network
+    environment:
+      - BUSINESS_INTEGRATOR_WITH_PORT=${BUSINESS_INTEGRATOR_SERVICE}:8080
+      - MONGO_DB_HOST=mongo1
+      - MONGO_DB_PORT=27017
+      - MONGO_DB_NAME=${MONGO_DB}
+
+#  metrics-db :
+#    image: mongo
+#    container_name: "metrics-db"
+#    ports:
+#      - "27017:27017"
+#    networks:
+#      - spring-newbank-network
+#    environment:
+#      - MONGO_INITDB_DATABASE=${MONGO_DB}
+
+networks:
+  spring-newbank-network:
+    external: true

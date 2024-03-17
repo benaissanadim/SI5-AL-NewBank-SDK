@@ -1,0 +1,75 @@
+HELP.md
+ target/
+ **/.mvn/wrapper/
+ !**/src/main/**/target/
+ !**/src/test/**/target/
+
+ **/out/
+ **/target/
+ **/build/
+ **/javadoc/
+ **/apidocs/
+ **/testapidocs/
+ **/spring-shell.log
+ **/logs/
+
+ ### STS ###
+ .apt_generated
+ .classpath
+ .factorypath
+ .project
+ .settings
+ .springBeans
+ .sts4-cache
+
+ ### IntelliJ IDEA ###
+ **/.idea/
+ **/*.iws
+ **/*.ipr
+ **/*.iml
+ **/.gradle
+ **/local.properties
+
+ ### NetBeans ###
+ /nbproject/private/
+ /nbbuild/
+ /dist/
+ /nbdist/
+ /.nb-gradle/
+ build/
+ !**/src/main/**/build/
+ !**/src/test/**/build/
+
+ ### VS Code ###
+ .vscode/
+
+ ### MacOS ###
+ **/.DS_Store
+
+ ### Mono build ###
+ **/*.exe
+
+### general .idea
+.idea/
+/web-sdk/lib/node_modules/
+/client-test/node_modules/
+/web-sdk/node_modules/
+/web-sdk/lib/dist/
+node_modules/class-validator/cjs/decorator/common/NotEquals.js.map
+*.map
+
+#.env files
+.env
+*/.env
+
+#ignore all .env files except the one in web-sdk
+!/web-sdk-example/testScripts/.env
+
+!/web-sdk-example/nestjs-web-service/.env
+
+transactions-service/.env
+metrics-service/.env
+
+/web-sdk/dist/
+/web-sdk-example/node_modules/
+/web-sdk-example/nestjs-web-service/node_modules/

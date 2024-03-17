@@ -1,0 +1,62 @@
+version: '3.8'
+
+services:
+  payment-gateway-authorizer-service:
+    restart: always
+    image: "newbank/payment-gateway-authorizer"
+    container_name: "payment-gateway-authorizer-service"
+    env_file:
+      - .env
+    ports:
+      - "3501:8080"
+ 
+    environment:
+      - CCN_WITH_PORT=${CCN_SERVICE}:8080
+      - PAYMENTPROCESSOR_WITH_PORT=${PAYMENT_PROCESSOR_SERVICE}:8080
+      - BUSINESSINTEGRATOR_WITH_PORT=${BUSINESSINTEGRATOR_SERVICE}:8080
+      - EXTERNALBANK_WITH_PORT=${EXTERNAL_BANK_SERVICE}:8080
+      - REDIS_HOST1=gateway-db1
+      - REDIS_HOST2=gateway-db2
+    networks:
+      - spring-newbank-network
+
+  payment-gateway-authorizer-service-2:
+    restart: always
+    image: "newbank/payment-gateway-authorizer"
+    container_name: "payment-gateway-authorizer-service-2"
+    env_file:
+      - .env
+    ports:
+      - "3503:8080"
+
+    environment:
+      - CCN_WITH_PORT=${CCN_SERVICE}:8080
+      - PAYMENT_WITH_PORT=${PAYMENTPROCESSOR_SERVICE}:8080
+      - BUSINESSINTEGRATOR_WITH_PORT=${BUSINESSINTEGRATOR_SERVICE}:8080
+      - EXTERNALBANK_WITH_PORT=${EXTERNAL_BANK_SERVICE}:8080
+      - REDIS_HOST1=gateway-db1
+      - REDIS_HOST2=gateway-db2
+
+    networks:
+      - spring-newbank-network
+      
+  nginx:
+    image: nginx:latest
+    container_name: "my-nginx"
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - payment-gateway-authorizer-service
+      - payment-gateway-authorizer-service-2
+      - payment-gateway-confirmation-service
+      - payment-gateway-confirmation-service-2
+    networks:
+      - spring-newbank-network
+networks:
+  spring-newbank-network:
+    external: true
+
+
+

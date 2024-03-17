@@ -1,0 +1,49 @@
+version: '3.7'
+
+services:
+
+  alertmanager:
+    image: prom/alertmanager:v0.23.0
+    container_name: alertmanager
+    restart: unless-stopped
+    ports:
+      - "9093:9093"
+    volumes:
+      - ./alertmanager:/config
+      - alertmanager-data:/data
+    command: --config.file=/config/alertmanager.yml --log.level=debug
+    networks:
+      - spring-newbank-network
+  prometheus:
+    image: prom/prometheus:v2.44.0
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./prometheus/prometheus.rules.yml:/etc/prometheus/prometheus.rules.yml
+    extra_hosts:
+      - host.docker.internal:172.17.0.1
+    networks:
+      - spring-newbank-network
+
+  grafana:
+    image: grafana/grafana:9.5.2
+
+    container_name: grafana
+    ports:
+      - "3800:3000"
+    restart: unless-stopped
+    volumes:
+      - ./grafana/provisioning/datasources:/etc/grafana/provisioning/datasources
+    networks:
+      - spring-newbank-network
+
+
+
+networks:
+   spring-newbank-network:
+     external: true
+
+volumes:
+    alertmanager-data:
